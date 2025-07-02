@@ -1,1 +1,1 @@
-# party
+# https://party.astrowweb.store
