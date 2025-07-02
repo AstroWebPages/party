@@ -1,1 +1,1 @@
-# https://party.astrowweb.store
+# https://party.astroweb.store
