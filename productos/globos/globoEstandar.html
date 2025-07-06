@@ -122,7 +122,7 @@
 
   <div class="selector-cajas" id="selectorDisenos">
 
-    <div class="caja" data-valor="Surtido CA-5-SUR">
+    <div class="caja" data-valor="Surtido CA-5-SUR" data-precio="1.70">
       <img draggable="false" src="../../assets/images/globos/CA-5-SUR.jpg" alt="Surtido CA-5-SUR">
       Surtido
       <div class="contador" style="display:none;">
@@ -130,7 +130,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Surtido CA-G15-TSUR">
+    <div class="caja" data-valor="Surtido CA-G15-TSUR" data-precio="1.16">
       <img draggable="false" src="../../assets/images/globos/CA-G15-TSUR.jpg" alt="Surtido CA-G15-TSUR">
       Surtido&nbsp;2
       <div class="contador" style="display:none;">
@@ -138,7 +138,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Negro CA-5-BLK">
+    <div class="caja" data-valor="Negro CA-5-BLK" data-precio="1.70">
       <img draggable="false" src="../../assets/images/globos/CA-5-BLK.jpg" alt="Negro CA-5-BLK">
       Negro
       <div class="contador" style="display:none;">
@@ -146,7 +146,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Fucsia CA-5-FUCS">
+    <div class="caja" data-valor="Fucsia CA-5-FUCS" data-precio="1.70">
       <img draggable="false" src="../../assets/images/globos/CA-5-FUCS.jpg" alt="Fucsia CA-5-FUCS">
       Fucsia
       <div class="contador" style="display:none;">
@@ -154,7 +154,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Dorado CA-5-GLD">
+    <div class="caja" data-valor="Dorado CA-5-GLD" data-precio="1.70">
       <img draggable="false" src="../../assets/images/globos/CA-5-GLD.jpg" alt="Dorado CA-5-GLD">
       Dorado
       <div class="contador" style="display:none;">
@@ -162,7 +162,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Magenta CA-5-MGT">
+    <div class="caja" data-valor="Magenta CA-5-MGT" data-precio="1.70">
       <img draggable="false" src="../../assets/images/globos/CA-5-MGT.jpg" alt="Magenta CA-5-MGT">
       Magenta
       <div class="contador" style="display:none;">
@@ -170,7 +170,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Rosado CA-5-RB">
+    <div class="caja" data-valor="Rosado CA-5-RB" data-precio="1.70">
       <img draggable="false" src="../../assets/images/globos/CA-5-RB.jpg" alt="Rosado CA-5-RB">
       Rosado
       <div class="contador" style="display:none;">
@@ -178,7 +178,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Rose Gold CA-5-RGLD">
+    <div class="caja" data-valor="Rose Gold CA-5-RGLD" data-precio="1.70">
       <img draggable="false" src="../../assets/images/globos/CA-5-RGLD.jpg" alt="Rose Gold CA-5-RGLD">
       Rose&nbsp;Gold
       <div class="contador" style="display:none;">
@@ -186,7 +186,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Plateado CA-5-SL">
+    <div class="caja" data-valor="Plateado CA-5-SL" data-precio="1.70">
       <img draggable="false" src="../../assets/images/globos/CA-5-SL.jpg" alt="Plateado CA-5-SL">
       Plateado
       <div class="contador" style="display:none;">
@@ -194,7 +194,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Blanco CA-5-WHI">
+    <div class="caja" data-valor="Blanco CA-5-WHI" data-precio="1.70">
       <img draggable="false" src="../../assets/images/globos/CA-5-WHI.jpg" alt="Blanco CA-5-WHI">
       Blanco
       <div class="contador" style="display:none;">
@@ -202,12 +202,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Fucsia CA-5-FUCS">
-      <img draggable="false" src="../../assets/images/globos/CA-5-FUCS.jpg" alt="Fucsia CA-5-FUCS">
-      Fucsia
-      <div class="contador" style="display:none;">
-        <input type="number" min="0" value="0" class="input-cantidad" placeholder="Unidades">
-      </div>
+    
 
   </div>
 </div>
@@ -269,38 +264,149 @@
 <!--BOTON WHASTAPP-->
 
         <script>
-                    function enviarWhatsApp() {
-              let producto = document.getElementById("producto").innerText; 
-              let opcion = document.getElementById("helio").value;
-              let diseno = document.getElementById("diseno").value;
-              let pcs = document.getElementById("pcs").value;
-              let detalle = document.getElementById("detalle").value.trim();
+function enviarWhatsApp() {
+  let producto = document.getElementById("producto").innerText; 
+  let opcion = document.getElementById("helio").value;
+  let pcs = document.getElementById("pcs").value;
+  let detalle = document.getElementById("detalle").value.trim();
 
-              if (!diseno) {
-                alert("⚠️ Por favor, selecciona un color de globo.");
-                return;
-              }
+  // Recolectar los colores seleccionados y sus cantidades
+  let disenoDetalle = "";
+  let total = 0;
+  let totalUnidades = 0;
 
-              if (!opcion) {
-                alert("⚠️ Por favor, selecciona si deseas globos con o sin helio.");
-                return;
-              }
+  document.querySelectorAll('.caja').forEach(caja => {
+    const nombre = caja.dataset.valor;
+    const precio = parseFloat(caja.dataset.precio) || 0;
+    const cantidad = parseInt(caja.querySelector('.input-cantidad').value) || 0;
 
-              let mensaje = `🎈 *Pedido de Globos - MegaParty*\n\n` +
-                            `🗂️ *Producto:* ${producto}\n` +
-                            `🎨 *Color seleccionado:* ${diseno}\n` +
-                            `🎈 *Opción:* ${opcion}\n` +
-                            `🔢 *Cantidad:* ${pcs} por unidad`;
+    if (cantidad > 0) {
+      const subtotal = cantidad * precio;
+      disenoDetalle += `• ${nombre} x${cantidad} = $${subtotal.toFixed(2)}\n`;
+      total += subtotal;
+      totalUnidades += cantidad;
+    }
+  });
 
-              if (detalle !== "") {
-                mensaje += `\n\n📝 *Detalle adicional:*\n${detalle}`;
-              }
+  if (disenoDetalle === "") {
+    alert("⚠️ Por favor, selecciona al menos un color de globo.");
+    return;
+  }
 
-              let url = `https://wa.me/+50378013735?text=${encodeURIComponent(mensaje)}`;
-              window.open(url, '_blank');
-            }
+  if (!opcion) {
+    alert("⚠️ Por favor, selecciona si deseas globos con o sin helio.");
+    return;
+  }
 
-        </script>
+  if (!pcs) {
+    alert("⚠️ Por favor, selecciona la cantidad de piezas por unidad.");
+    return;
+  }
+
+  // Calcular descuento
+  let descuentoPorc = 0;
+  if (totalUnidades >= 6 && totalUnidades < 10) {
+    descuentoPorc = 5;
+  } else if (totalUnidades === 10) {
+    descuentoPorc = 10;
+  } else if (totalUnidades > 10) {
+    descuentoPorc = 15;
+  }
+
+  let descuento = total * (descuentoPorc / 100);
+  let totalFinal = total - descuento;
+
+  // Construir mensaje
+  let mensaje = `🎈 *Pedido de Globos - MegaParty*\n\n` +
+                `🗂️ *Producto:* ${producto}\n` +
+                `🎨 *Colores seleccionados:*\n${disenoDetalle}` +
+                `🎈 *Opción:* ${opcion}\n` +
+                `🔢 *Cantidad por unidad:* ${pcs}\n` +
+                `📦 *Unidades totales:* ${totalUnidades}\n`;
+
+  if (descuentoPorc > 0) {
+    mensaje += `✅ *Descuento aplicado:* ${descuentoPorc}% (-$${descuento.toFixed(2)})\n`;
+  }
+
+  mensaje += `💵 *Total a pagar:* $${totalFinal.toFixed(2)}`;
+
+  if (detalle !== "") {
+    mensaje += `\n\n📝 *Detalle adicional:*\n${detalle}`;
+  }
+
+  let url = `https://wa.me/+50378013735?text=${encodeURIComponent(mensaje)}`;
+  window.open(url, '_blank');
+}
+
+// Escucha cambios en inputs para recalcular
+input.addEventListener('input', function () {
+  const caja = this.closest('.caja');
+  const cantidad = parseInt(this.value) || 0;
+
+  if (cantidad > 0) {
+    caja.classList.add('seleccionado');
+  } else {
+    caja.classList.remove('seleccionado');
+  }
+
+  actualizarInputHidden();
+  actualizarPrecioTotal();
+});
+
+input.addEventListener('blur', function () {
+  if (this.value.trim() === "") {
+    this.value = valorAnterior || 1;
+  }
+  // Nuevo: revalida seleccionado o no
+  const caja = this.closest('.caja');
+  const cantidad = parseInt(this.value) || 0;
+  if (cantidad > 0) {
+    caja.classList.add('seleccionado');
+  } else {
+    caja.classList.remove('seleccionado');
+  }
+
+  actualizarInputHidden();
+  actualizarPrecioTotal();
+});
+
+
+
+
+function actualizarPrecioTotal() {
+  let total = 0;
+  let totalUnidades = 0;
+
+  document.querySelectorAll('.caja').forEach(caja => {
+    const precio = parseFloat(caja.dataset.precio) || 0;
+    const cantidad = parseInt(caja.querySelector('.input-cantidad').value) || 0;
+
+    total += cantidad * precio;
+    totalUnidades += cantidad;
+  });
+
+  let descuentoPorc = 0;
+  if (totalUnidades >= 6 && totalUnidades < 10) {
+    descuentoPorc = 5;
+  } else if (totalUnidades === 10) {
+    descuentoPorc = 10;
+  } else if (totalUnidades > 10) {
+    descuentoPorc = 15;
+  }
+
+  let descuento = total * (descuentoPorc / 100);
+  let totalFinal = total - descuento;
+
+  document.getElementById('precioTotal').textContent = totalFinal.toFixed(2);
+
+  const descuentoInfo = document.getElementById('descuentoInfo');
+  if (descuentoPorc > 0) {
+    descuentoInfo.textContent = `¡Descuento aplicado: ${descuentoPorc}% (-$${descuento.toFixed(2)})!`;
+  } else {
+    descuentoInfo.textContent = "";
+  }
+}
+</script>
 
 
 <!-- FIN FORMULARIO NUEVO -->

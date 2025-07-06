@@ -122,7 +122,7 @@
 
   <div class="selector-cajas" id="selectorDisenos">
 
-    <div class="caja" data-valor="Dorado CA-GOLD-GLC1">
+    <div class="caja" data-valor="Dorado CA-GOLD-GLC1" data-precio="1.50">
       <img draggable="false" src="../../assets/images/globos/CA-GOLD-GLC1.jpg" alt="Dorado CA-GOLD-GLC1">
       Dorado
       <div class="contador" style="display:none;">
@@ -130,7 +130,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Blanco CA-WHI-GLC1">
+    <div class="caja" data-valor="Blanco CA-WHI-GLC1" data-precio="1.50">
       <img draggable="false" src="../../assets/images/globos/CA-WHI-GLC1.jpg" alt="Blanco CA-WHI-GLC1">
       Blanco
       <div class="contador" style="display:none;">
@@ -138,7 +138,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Negro CA-BLACK-GLC1">
+    <div class="caja" data-valor="Negro CA-BLACK-GLC1" data-precio="1.50">
       <img draggable="false" src="../../assets/images/globos/CA-BLACK-GLC1.jpg" alt="Negro CA-BLACK-GLC1">
       Negro
       <div class="contador" style="display:none;">
@@ -147,16 +147,22 @@
     </div>
 
 
-    
 
 
-  </div>
+                      </div>
+  <!-- SECCIÓN PRECIO TOTAL -->
+  <div class="precio-total" style="margin-top:20px;">
+  <strong>Total: $<span id="precioTotal">0.00</span></strong><br>
+  <span id="descuentoInfo" style="color: green; font-weight: bold;"></span>
 </div>
 
-  <!-- FORMULARIO NUEVO -->
+</div>
 
 
-                  
+                      <!--nuevo formulario -->
+
+
+
                     <div class="col-lg-3">
                     <div class="sticky-formulario">
                       <h4>Formulario de pedido</h4>
@@ -210,38 +216,149 @@
 <!--BOTON WHASTAPP-->
 
         <script>
-                    function enviarWhatsApp() {
-              let producto = document.getElementById("producto").innerText; 
-              let opcion = document.getElementById("helio").value;
-              let diseno = document.getElementById("diseno").value;
-              let pcs = document.getElementById("pcs").value;
-              let detalle = document.getElementById("detalle").value.trim();
+function enviarWhatsApp() {
+  let producto = document.getElementById("producto").innerText; 
+  let opcion = document.getElementById("helio").value;
+  let pcs = document.getElementById("pcs").value;
+  let detalle = document.getElementById("detalle").value.trim();
 
-              if (!diseno) {
-                alert("⚠️ Por favor, selecciona un color de globo.");
-                return;
-              }
+  // Recolectar los colores seleccionados y sus cantidades
+  let disenoDetalle = "";
+  let total = 0;
+  let totalUnidades = 0;
 
-              if (!opcion) {
-                alert("⚠️ Por favor, selecciona si deseas globos con o sin helio.");
-                return;
-              }
+  document.querySelectorAll('.caja').forEach(caja => {
+    const nombre = caja.dataset.valor;
+    const precio = parseFloat(caja.dataset.precio) || 0;
+    const cantidad = parseInt(caja.querySelector('.input-cantidad').value) || 0;
 
-              let mensaje = `🎈 *Pedido de Globos - MegaParty*\n\n` +
-                            `🗂️ *Producto:* ${producto}\n` +
-                            `🎨 *Color seleccionado:* ${diseno}\n` +
-                            `🎈 *Opción:* ${opcion}\n` +
-                            `🔢 *Cantidad:* ${pcs} por unidad`;
+    if (cantidad > 0) {
+      const subtotal = cantidad * precio;
+      disenoDetalle += `• ${nombre} x${cantidad} = $${subtotal.toFixed(2)}\n`;
+      total += subtotal;
+      totalUnidades += cantidad;
+    }
+  });
 
-              if (detalle !== "") {
-                mensaje += `\n\n📝 *Detalle adicional:*\n${detalle}`;
-              }
+  if (disenoDetalle === "") {
+    alert("⚠️ Por favor, selecciona al menos un color de globo.");
+    return;
+  }
 
-              let url = `https://wa.me/+50378013735?text=${encodeURIComponent(mensaje)}`;
-              window.open(url, '_blank');
-            }
+  if (!opcion) {
+    alert("⚠️ Por favor, selecciona si deseas globos con o sin helio.");
+    return;
+  }
 
-        </script>
+  if (!pcs) {
+    alert("⚠️ Por favor, selecciona la cantidad de piezas por unidad.");
+    return;
+  }
+
+  // Calcular descuento
+  let descuentoPorc = 0;
+  if (totalUnidades >= 6 && totalUnidades < 10) {
+    descuentoPorc = 5;
+  } else if (totalUnidades === 10) {
+    descuentoPorc = 10;
+  } else if (totalUnidades > 10) {
+    descuentoPorc = 15;
+  }
+
+  let descuento = total * (descuentoPorc / 100);
+  let totalFinal = total - descuento;
+
+  // Construir mensaje
+  let mensaje = `🎈 *Pedido de Globos - MegaParty*\n\n` +
+                `🗂️ *Producto:* ${producto}\n` +
+                `🎨 *Colores seleccionados:*\n${disenoDetalle}` +
+                `🎈 *Opción:* ${opcion}\n` +
+                `🔢 *Cantidad por unidad:* ${pcs}\n` +
+                `📦 *Unidades totales:* ${totalUnidades}\n`;
+
+  if (descuentoPorc > 0) {
+    mensaje += `✅ *Descuento aplicado:* ${descuentoPorc}% (-$${descuento.toFixed(2)})\n`;
+  }
+
+  mensaje += `💵 *Total a pagar:* $${totalFinal.toFixed(2)}`;
+
+  if (detalle !== "") {
+    mensaje += `\n\n📝 *Detalle adicional:*\n${detalle}`;
+  }
+
+  let url = `https://wa.me/+50378013735?text=${encodeURIComponent(mensaje)}`;
+  window.open(url, '_blank');
+}
+
+// Escucha cambios en inputs para recalcular
+input.addEventListener('input', function () {
+  const caja = this.closest('.caja');
+  const cantidad = parseInt(this.value) || 0;
+
+  if (cantidad > 0) {
+    caja.classList.add('seleccionado');
+  } else {
+    caja.classList.remove('seleccionado');
+  }
+
+  actualizarInputHidden();
+  actualizarPrecioTotal();
+});
+
+input.addEventListener('blur', function () {
+  if (this.value.trim() === "") {
+    this.value = valorAnterior || 1;
+  }
+  // Nuevo: revalida seleccionado o no
+  const caja = this.closest('.caja');
+  const cantidad = parseInt(this.value) || 0;
+  if (cantidad > 0) {
+    caja.classList.add('seleccionado');
+  } else {
+    caja.classList.remove('seleccionado');
+  }
+
+  actualizarInputHidden();
+  actualizarPrecioTotal();
+});
+
+
+
+
+function actualizarPrecioTotal() {
+  let total = 0;
+  let totalUnidades = 0;
+
+  document.querySelectorAll('.caja').forEach(caja => {
+    const precio = parseFloat(caja.dataset.precio) || 0;
+    const cantidad = parseInt(caja.querySelector('.input-cantidad').value) || 0;
+
+    total += cantidad * precio;
+    totalUnidades += cantidad;
+  });
+
+  let descuentoPorc = 0;
+  if (totalUnidades >= 6 && totalUnidades < 10) {
+    descuentoPorc = 5;
+  } else if (totalUnidades === 10) {
+    descuentoPorc = 10;
+  } else if (totalUnidades > 10) {
+    descuentoPorc = 15;
+  }
+
+  let descuento = total * (descuentoPorc / 100);
+  let totalFinal = total - descuento;
+
+  document.getElementById('precioTotal').textContent = totalFinal.toFixed(2);
+
+  const descuentoInfo = document.getElementById('descuentoInfo');
+  if (descuentoPorc > 0) {
+    descuentoInfo.textContent = `¡Descuento aplicado: ${descuentoPorc}% (-$${descuento.toFixed(2)})!`;
+  } else {
+    descuentoInfo.textContent = "";
+  }
+}
+</script>
 
 
 <!-- FIN FORMULARIO NUEVO -->

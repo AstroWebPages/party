@@ -119,6 +119,7 @@
   </div>
 
   <div class="contact-page section">
+    
     <div class="container">
       <div class="row">
         <div class="col-lg-6">
@@ -146,40 +147,66 @@ En nuestras tiendas encontrarás productos necesarios para amenizar sus fiestas:
             </div>
           </div>
         </div>
+        
         <div class="col-lg-6">
-          <form id="contact-form" action="" method="post">
-            <div class="row">
-              <div class="col-lg-12">
-                <fieldset>
-                  <label for="name">Nombre</label>
-                  <input type="name" name="name" id="name" placeholder="Nombre..." autocomplete="on" required>
-                </fieldset>
-              </div>
-              <div class="col-lg-12">
-                <fieldset>
-                  <label for="email">Email </label>
-                  <input type="text" name="email" id="email" pattern="[^ @]*@[^ @]*" placeholder="E-mail..." required="">
-                </fieldset>
-              </div>
-              <div class="col-lg-12">
-                <fieldset>
-                  <label for="subject">Tema</label>
-                  <input type="subject" name="subject" id="subject" placeholder="Tema..." autocomplete="on" >
-                </fieldset>
-              </div>
-              <div class="col-lg-12">
-                <fieldset>
-                  <label for="message">Mensaje</label>
-                  <textarea name="message" id="message" placeholder="Mensaje"></textarea>
-                </fieldset>
-              </div>
-              <div class="col-lg-12">
-                <fieldset>
-                  <button type="submit" id="form-submit" class="orange-button">Enviar Mensaje</button>
-                </fieldset>
-              </div>
-            </div>
-          </form>
+
+          <form id="contact-form">
+            <span class="emoji-border emoji-1">🎉</span>
+<span class="emoji-border emoji-2">✨</span>
+<span class="emoji-border emoji-3">🎈</span>
+<span class="emoji-border emoji-4">🌈</span>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <fieldset>
+        <label for="name">Nombre</label>
+        <input type="text" name="name" id="name" placeholder="Nombre..." required>
+      </fieldset>
+    </div>
+    <div class="col-lg-12">
+      <fieldset>
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" placeholder="Email..." required>
+      </fieldset>
+    </div>
+    <div class="col-lg-12">
+      <fieldset>
+        <label for="subject">Tema</label>
+        <input type="text" name="subject" id="subject" placeholder="Tema...">
+      </fieldset>
+    </div>
+    <div class="col-lg-12">
+      <fieldset>
+        <label for="message">Mensaje</label>
+        <textarea name="message" id="message" placeholder="Mensaje"></textarea>
+      </fieldset>
+    </div>
+    <div class="col-lg-12">
+      <fieldset>
+        <button type="submit" id="form-submit" class="orange-button">Enviar Mensaje</button>
+      </fieldset>
+    </div>
+  </div>
+</form>
+</div>
+<script>
+  const form = document.getElementById('contact-form');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault(); // Evita que se envíe de forma normal
+
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const subject = document.getElementById('subject').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    const mensaje = `Nombre: ${name}%0AEmail: ${email}%0ATema: ${subject}%0AMensaje: ${message}`;
+
+    const url = `https://wa.me/+50378013735?text=${mensaje}`;
+
+    window.open(url, '_blank');
+  });
+</script>
         </div>
         <div class="col-lg-12">
           <div id="map">

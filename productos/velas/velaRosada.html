@@ -46,7 +46,7 @@
       <div class="row">
         <div class="col-lg-8 col-md-8">
           <ul class="info">
-            <li data-href="mailto:ventasmegapartytoys@gmail.com"><i class="fa fa-envelope"></i> ventasmegapartytoys@gmail.com</li>
+            <li data-href="mailto:astrowebpages@gmail.com"><i class="fa fa-envelope"></i> astrowebpages@gmail.com</li>
             <li data-href="https://maps.app.goo.gl/uK5McNyCE6pwyZLU6"><i class="fa fa-map"></i> Colón 2000 Duty Free Mall piso #2 A107, Ciudad Colón, Panamá</li>
           </ul>
           </ul>
@@ -117,28 +117,58 @@
                       </div>
                     </div>
                     <div class="col-lg-6">
-                      <img draggable="false" src="../../assets/images/velas/CA-PINK-VL9.jpg" alt="">
+  <label for="diseno">Selecciona Color:</label>
+  <input type="hidden" id="diseno" name="diseno" />
 
-                    </div>
+  <div class="selector-cajas" id="selectorDisenos">
+
+    <div class="caja" data-valor="Velas Rosadas CA-PINK-VL9" data-precio="0.90">
+      <img draggable="false" src="../../assets/images/velas/CA-PINK-VL9.jpg" alt="Velas Rosadas CA-PINK-VL9">
+      Velas Rosadas
+      <div class="contador" style="display:none;">
+        <input type="number" min="0" value="0" class="input-cantidad" placeholder="Unidades">
+      </div>
+    </div>
+
+    <div class="caja" data-valor="Velas CA-BLUE-VL9" data-precio="0.90">
+      <img draggable="false" src="../../assets/images/velas/CA-BLUE-VL9.jpg" alt="Velas CA-BLUE-VL9">
+      Velas Azules
+      <div class="contador" style="display:none;">
+        <input type="number" min="0" value="0" class="input-cantidad" placeholder="Unidades">
+      </div>
+    </div>
+
+
+
+
+                      </div>
+  <!-- SECCIÓN PRECIO TOTAL -->
+  <div class="precio-total" style="margin-top:20px;">
+  <strong>Total: $<span id="precioTotal">0.00</span></strong><br>
+  <span id="descuentoInfo" style="color: green; font-weight: bold;"></span>
+</div>
+
+</div>
+
+
+                      <!--nuevo formulario -->
+
+
+
                     <div class="col-lg-3">
+                    <div class="sticky-formulario">
                       <h4>Formulario de pedido</h4>
                       
   <!--funcion helio y cantidad-->
 
 
-                          <label class="label" for="cantidad">Cantidad de unidades:</label>
-                          <input class="input" type="number" id="cantidad" min="1" placeholder="Ingrese Unidades">
+<label class="label" for="detalle">Detallar pedido (opcional):</label><br><br>
+<textarea class="input" id="detalle" placeholder="Detalle su pedido" rows="4"></textarea>
+
                          
-                          
-                          <br><br>
-                          
-                          <label for="pcs">Piezas por unidad</label><br>
-                          <select class="input" id="pcs">
-                              <option value="9Pcs">Unidad de 9 Piezas</option>
-
-                          </select>
 
                           <br><br>
+
 
                           <button class="button3" onclick="enviarWhatsApp()">Enviar a WhatsApp
                               <svg viewBox="0 0 48 48" y="0px" x="0px" xmlns="http://www.w3.org/2000/svg">
@@ -155,31 +185,111 @@
       </div>
     </div>
   </div>
+</div>
 
   <!--BOTON WHASTAPP-->
 
   <script>
-      function enviarWhatsApp() {
-          let cantidad = document.getElementById("cantidad").value;
-          let pcs = document.getElementById("pcs").value;
-          var producto = document.getElementById("producto").textContent;
+function enviarWhatsApp() {
+  let producto = document.getElementById("producto").innerText; 
+  let detalle = document.getElementById("detalle").value.trim();
 
+  let disenoDetalle = "";
+  let total = 0;
+  let totalUnidades = 0;
 
-          if (!cantidad || cantidad <= 0) {
-              alert("Por favor, ingresa una cantidad válida de globos.");
-              return;
-          }
+  // Recorre todos los productos seleccionados
+  document.querySelectorAll('.caja').forEach(caja => {
+    const nombre = caja.dataset.valor;
+    const precio = parseFloat(caja.dataset.precio) || 0;
+    const cantidad = parseInt(caja.querySelector('.input-cantidad').value) || 0;
 
-          if (!pcs) {
-              alert("Por favor, selecciona una cantidad de piezas.");
-              return;
-          }
+    if (cantidad > 0) {
+      const subtotal = cantidad * precio;
+      disenoDetalle += `• ${nombre} x${cantidad} = $${subtotal.toFixed(2)}\n`;
+      total += subtotal;
+      totalUnidades += cantidad;
+    }
+  });
 
-          let mensaje = encodeURIComponent(`Deseo ${cantidad} unidades de: ${producto} de ${pcs} `);
-          let url = `https://wa.me/+50378013735?text=${mensaje}`;
-          window.open(url, '_blank'); 
-        }
-  </script>
+  if (disenoDetalle === "") {
+    alert("⚠️ Por favor, selecciona al menos un producto.");
+    return;
+  }
+
+  // Calcular descuento por cantidad total de unidades
+  let descuentoPorc = 0;
+  if (totalUnidades >= 6 && totalUnidades < 10) {
+    descuentoPorc = 5;
+  } else if (totalUnidades === 10) {
+    descuentoPorc = 10;
+  } else if (totalUnidades > 10) {
+    descuentoPorc = 15;
+  }
+
+  let descuento = total * (descuentoPorc / 100);
+  let totalFinal = total - descuento;
+
+  // Construir mensaje principal
+  let mensaje = `📦 *Pedido MegaParty*\n\n` +
+                `🧸 *Producto:* ${producto}\n` +
+                `🎨 *Diseño(s) seleccionado(s):*\n${disenoDetalle}` +
+                `📦 *Unidades totales:* ${totalUnidades}\n`;
+
+  if (descuentoPorc > 0) {
+    mensaje += `✅ *Descuento aplicado:* ${descuentoPorc}% (-$${descuento.toFixed(2)})\n`;
+  }
+
+  mensaje += `💵 *Total a pagar:* $${totalFinal.toFixed(2)}`;
+
+  if (detalle !== "") {
+    mensaje += `\n\n📝 *Detalle del pedido:*\n${detalle}`;
+  }
+
+  let url = `https://wa.me/+50378013735?text=${encodeURIComponent(mensaje)}`;
+  window.open(url, '_blank');
+}
+
+// OPCIONAL: Si quieres que el precio total en pantalla se actualice en tiempo real con descuento:
+document.querySelectorAll('.input-cantidad').forEach(input => {
+  input.addEventListener('input', actualizarPrecioTotal);
+});
+
+function actualizarPrecioTotal() {
+  let total = 0;
+  let totalUnidades = 0;
+
+  document.querySelectorAll('.caja').forEach(caja => {
+    const precioUnitario = parseFloat(caja.dataset.precio) || 0;
+    const cantidad = parseInt(caja.querySelector('.input-cantidad').value) || 0;
+
+    total += cantidad * precioUnitario;
+    totalUnidades += cantidad;
+  });
+
+  let descuentoPorc = 0;
+  if (totalUnidades >= 6 && totalUnidades < 10) {
+    descuentoPorc = 5;
+  } else if (totalUnidades === 10) {
+    descuentoPorc = 10;
+  } else if (totalUnidades > 10) {
+    descuentoPorc = 15;
+  }
+
+  let descuento = total * (descuentoPorc / 100);
+  let totalFinal = total - descuento;
+
+  document.getElementById('precioTotal').textContent = totalFinal.toFixed(2);
+
+  const descuentoInfo = document.getElementById('descuentoInfo');
+  if (descuentoPorc > 0) {
+    descuentoInfo.textContent = `¡Descuento aplicado: ${descuentoPorc}% (-$${descuento.toFixed(2)})!`;
+  } else {
+    descuentoInfo.textContent = ""; // Quita el texto si no hay descuento
+  }
+}
+
+</script>
 
 
   <script>

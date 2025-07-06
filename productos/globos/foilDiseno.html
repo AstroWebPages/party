@@ -122,7 +122,7 @@
 
   <div class="selector-cajas" id="selectorDisenos">
 
-    <div class="caja" data-valor="Bluey DPG-BLU-OR16">
+    <div class="caja" data-valor="Bluey DPG-BLU-OR16" data-precio="3.00">
       <img draggable="false" src="../../assets/images/globos/DPG-BLU-OR16.jpg" alt="Bluey DPG-BLU-OR16">
       Bluey
       <div class="contador" style="display:none;">
@@ -130,7 +130,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Minnie DPG-MI-OR16">
+    <div class="caja" data-valor="Minnie DPG-MI-OR16" data-precio="3.00">
       <img draggable="false" src="../../assets/images/globos/DPG-MI-OR16.jpg" alt="Minnie DPG-MI-OR16">
       Minnie
       <div class="contador" style="display:none;">
@@ -138,7 +138,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Mickey DPG-MK-OR16">
+    <div class="caja" data-valor="Mickey DPG-MK-OR16" data-precio="3.00">
       <img draggable="false" src="../../assets/images/globos/DPG-MK-OR16.jpg" alt="Mickey DPG-MK-OR16">
       Mickey
       <div class="contador" style="display:none;">
@@ -146,7 +146,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Spider-Man MPG-SP-OR16">
+    <div class="caja" data-valor="Spider-Man MPG-SP-OR16" data-precio="3.00">
       <img draggable="false" src="../../assets/images/globos/MPG-SP-OR16.jpg" alt="Spider-Man MPG-SP-OR16">
       Spider-Man
       <div class="contador" style="display:none;">
@@ -154,7 +154,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Sonic SPG-SN-OR16">
+    <div class="caja" data-valor="Sonic SPG-SN-OR16" data-precio="3.00">
       <img draggable="false" src="../../assets/images/globos/SPG-SN-OR16.jpg" alt="Sonic SPG-SN-OR16">
       Sonic
       <div class="contador" style="display:none;">
@@ -162,7 +162,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Dragon&nbsp;Ball&nbsp;Z TPG-DB-OR16">
+    <div class="caja" data-valor="Dragon&nbsp;Ball&nbsp;Z TPG-DB-OR16" data-precio="3.00">
       <img draggable="false" src="../../assets/images/globos/TPG-DB-OR16.jpg" alt="Dragon Ball Z TPG-DB-OR16">
       Dragon&nbsp;Ball&nbsp;Z
       <div class="contador" style="display:none;">
@@ -170,7 +170,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Paw&nbsp;Patrol&nbsp;(Rosa) XPG-PWG-OR16">
+    <div class="caja" data-valor="Paw&nbsp;Patrol&nbsp;(Rosa) XPG-PWG-OR16" data-precio="3.00">
       <img draggable="false" src="../../assets/images/globos/XPG-PWG-OR16.jpg" alt="Paw Patrol (Rosa) XPG-PWG-OR16">
       Paw&nbsp;Patrol&nbsp;(Rosa)
       <div class="contador" style="display:none;">
@@ -178,7 +178,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Paw&nbsp;Patrol&nbsp;(Azul) XPG-PW-OR16">
+    <div class="caja" data-valor="Paw&nbsp;Patrol&nbsp;(Azul) XPG-PW-OR16" data-precio="3.00">
       <img draggable="false" src="../../assets/images/globos/XPG-PW-OR16.jpg" alt="Paw Patrol (Azul) XPG-PW-OR16">
       Paw&nbsp;Patrol&nbsp;(Azul)
       <div class="contador" style="display:none;">
@@ -186,13 +186,32 @@
       </div>
     </div>
 
+
+    <div class="caja" data-valor="Globo Foil PPG-PR-OR16" data-precio="3.00">
+      <img draggable="false" src="../../assets/images/personajes/princesas/PPG-PR-OR16.jpg" alt="Princesas PPG-PR-OR16">
+    Globo&nbsp;Foil
+    <div class="contador" style="display:none;">
+      <input type="number" min="0" value="0" class="input-cantidad" placeholder="Unidades">
+    </div>
   </div>
 
 
-                    <!-- FORMULARIO NUEVO -->
 
 
-                    </div>
+                      </div>
+  <!-- SECCIÓN PRECIO TOTAL -->
+  <div class="precio-total" style="margin-top:20px;">
+  <strong>Total: $<span id="precioTotal">0.00</span></strong><br>
+  <span id="descuentoInfo" style="color: green; font-weight: bold;"></span>
+</div>
+
+</div>
+
+
+                      <!--nuevo formulario -->
+
+
+
                     <div class="col-lg-3">
                     <div class="sticky-formulario">
                       <h4>Formulario de pedido</h4>
@@ -246,38 +265,150 @@
 <!--BOTON WHASTAPP-->
 
         <script>
-                    function enviarWhatsApp() {
-              let producto = document.getElementById("producto").innerText; 
-              let opcion = document.getElementById("helio").value;
-              let diseno = document.getElementById("diseno").value;
-              let pcs = document.getElementById("pcs").value;
-              let detalle = document.getElementById("detalle").value.trim();
+function enviarWhatsApp() {
+  let producto = document.getElementById("producto").innerText; 
+  let opcion = document.getElementById("helio").value;
+  let pcs = document.getElementById("pcs").value;
+  let detalle = document.getElementById("detalle").value.trim();
 
-              if (!diseno) {
-                alert("⚠️ Por favor, selecciona un color de globo.");
-                return;
-              }
+  // Recolectar los colores seleccionados y sus cantidades
+  let disenoDetalle = "";
+  let total = 0;
+  let totalUnidades = 0;
 
-              if (!opcion) {
-                alert("⚠️ Por favor, selecciona si deseas globos con o sin helio.");
-                return;
-              }
+  document.querySelectorAll('.caja').forEach(caja => {
+    const nombre = caja.dataset.valor;
+    const precio = parseFloat(caja.dataset.precio) || 0;
+    const cantidad = parseInt(caja.querySelector('.input-cantidad').value) || 0;
 
-              let mensaje = `🎈 *Pedido de Globos - MegaParty*\n\n` +
-                            `🗂️ *Producto:* ${producto}\n` +
-                            `🎨 *Color seleccionado:* ${diseno}\n` +
-                            `🎈 *Opción:* ${opcion}\n` +
-                            `🔢 *Cantidad:* ${pcs} por unidad`;
+    if (cantidad > 0) {
+      const subtotal = cantidad * precio;
+      disenoDetalle += `• ${nombre} x${cantidad} = $${subtotal.toFixed(2)}\n`;
+      total += subtotal;
+      totalUnidades += cantidad;
+    }
+  });
 
-              if (detalle !== "") {
-                mensaje += `\n\n📝 *Detalle adicional:*\n${detalle}`;
-              }
+  if (disenoDetalle === "") {
+    alert("⚠️ Por favor, selecciona al menos un color de globo.");
+    return;
+  }
 
-              let url = `https://wa.me/+50378013735?text=${encodeURIComponent(mensaje)}`;
-              window.open(url, '_blank');
-            }
+  if (!opcion) {
+    alert("⚠️ Por favor, selecciona si deseas globos con o sin helio.");
+    return;
+  }
 
-        </script>
+  if (!pcs) {
+    alert("⚠️ Por favor, selecciona la cantidad de piezas por unidad.");
+    return;
+  }
+
+  // Calcular descuento
+  let descuentoPorc = 0;
+  if (totalUnidades >= 6 && totalUnidades < 10) {
+    descuentoPorc = 5;
+  } else if (totalUnidades === 10) {
+    descuentoPorc = 10;
+  } else if (totalUnidades > 10) {
+    descuentoPorc = 15;
+  }
+
+  let descuento = total * (descuentoPorc / 100);
+  let totalFinal = total - descuento;
+
+  // Construir mensaje
+  let mensaje = `🎈 *Pedido de Globos - MegaParty*\n\n` +
+                `🗂️ *Producto:* ${producto}\n` +
+                `🎨 *Colores seleccionados:*\n${disenoDetalle}` +
+                `🎈 *Opción:* ${opcion}\n` +
+                `🔢 *Cantidad por unidad:* ${pcs}\n` +
+                `📦 *Unidades totales:* ${totalUnidades}\n`;
+
+  if (descuentoPorc > 0) {
+    mensaje += `✅ *Descuento aplicado:* ${descuentoPorc}% (-$${descuento.toFixed(2)})\n`;
+  }
+
+  mensaje += `💵 *Total a pagar:* $${totalFinal.toFixed(2)}`;
+
+  if (detalle !== "") {
+    mensaje += `\n\n📝 *Detalle adicional:*\n${detalle}`;
+  }
+
+  let url = `https://wa.me/+50378013735?text=${encodeURIComponent(mensaje)}`;
+  window.open(url, '_blank');
+}
+
+// Escucha cambios en inputs para recalcular
+input.addEventListener('input', function () {
+  const caja = this.closest('.caja');
+  const cantidad = parseInt(this.value) || 0;
+
+  if (cantidad > 0) {
+    caja.classList.add('seleccionado');
+  } else {
+    caja.classList.remove('seleccionado');
+  }
+
+  actualizarInputHidden();
+  actualizarPrecioTotal();
+});
+
+input.addEventListener('blur', function () {
+  if (this.value.trim() === "") {
+    this.value = valorAnterior || 1;
+  }
+  // Nuevo: revalida seleccionado o no
+  const caja = this.closest('.caja');
+  const cantidad = parseInt(this.value) || 0;
+  if (cantidad > 0) {
+    caja.classList.add('seleccionado');
+  } else {
+    caja.classList.remove('seleccionado');
+  }
+
+  actualizarInputHidden();
+  actualizarPrecioTotal();
+});
+
+
+
+
+function actualizarPrecioTotal() {
+  let total = 0;
+  let totalUnidades = 0;
+
+  document.querySelectorAll('.caja').forEach(caja => {
+    const precio = parseFloat(caja.dataset.precio) || 0;
+    const cantidad = parseInt(caja.querySelector('.input-cantidad').value) || 0;
+
+    total += cantidad * precio;
+    totalUnidades += cantidad;
+  });
+
+  let descuentoPorc = 0;
+  if (totalUnidades >= 6 && totalUnidades < 10) {
+    descuentoPorc = 5;
+  } else if (totalUnidades === 10) {
+    descuentoPorc = 10;
+  } else if (totalUnidades > 10) {
+    descuentoPorc = 15;
+  }
+
+  let descuento = total * (descuentoPorc / 100);
+  let totalFinal = total - descuento;
+
+  document.getElementById('precioTotal').textContent = totalFinal.toFixed(2);
+
+  const descuentoInfo = document.getElementById('descuentoInfo');
+  if (descuentoPorc > 0) {
+    descuentoInfo.textContent = `¡Descuento aplicado: ${descuentoPorc}% (-$${descuento.toFixed(2)})!`;
+  } else {
+    descuentoInfo.textContent = "";
+  }
+}
+</script>
+
 
 
 <!-- FIN FORMULARIO NUEVO -->

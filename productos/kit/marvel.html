@@ -123,16 +123,16 @@
   
   
   
-    <div class="caja" data-valor="Bolsa de regalo Avengers (Izquierda) MPG-AV-GB22">
-    <img draggable="false" src="../../assets/images/personajes/marvel/MPG-AV-GB22.jpg" alt="Avengers MPG-AV-GB22">
+    <div class="caja" data-valor="Bolsa de regalo Avengers (Izquierda) MPG-AV-GB22" data-precio="1.30">
+      <img draggable="false" src="../../assets/images/personajes/marvel/MPG-AV-GB22.jpg" alt="Avengers MPG-AV-GB22">
     Bolsa&nbsp;de&nbsp;regalo&nbsp;(Izquierda)
     <div class="contador" style="display:none;">
       <input type="number" min="0" value="0" class="input-cantidad" placeholder="Unidades">
     </div>
   </div>
 
-  <div class="caja" data-valor="Bolsa de regalo Avengers (Derecha) MPG-AV-GB22">
-    <img draggable="false" src="../../assets/images/personajes/marvel/MPG-AV-GB22.jpg" alt="Avengers MPG-AV-GB22">
+  <div class="caja" data-valor="Bolsa de regalo Avengers (Derecha) MPG-AV-GB22" data-precio="1.30">
+      <img draggable="false" src="../../assets/images/personajes/marvel/MPG-AV-GB22.jpg" alt="Avengers MPG-AV-GB22">
     Bolsa&nbsp;de&nbsp;regalo&nbsp;(Derecha)
     <div class="contador" style="display:none;">
       <input type="number" min="0" value="0" class="input-cantidad" placeholder="Unidades">
@@ -142,48 +142,48 @@
   
 
 
-  <div class="caja" data-valor="Burbujero MT-AV-B18">
-    <img draggable="false" src="../../assets/images/personajes/marvel/MT-AV-B18.jpg" alt="Avengers MT-AV-B18">
+  <div class="caja" data-valor="Burbujero MT-AV-B18" data-precio="1.40">
+      <img draggable="false" src="../../assets/images/personajes/marvel/MT-AV-B18.jpg" alt="Avengers MT-AV-B18">
     Burbujero
     <div class="contador" style="display:none;">
       <input type="number" min="0" value="0" class="input-cantidad" placeholder="Unidades">
     </div>
   </div>
 
-  <div class="caja" data-valor="Balón Fútbol MT-AV-SC4">
-    <img draggable="false" src="../../assets/images/personajes/marvel/MT-AV-SC4.jpg" alt="Avengers MT-AV-SC4">
+  <div class="caja" data-valor="Balón Fútbol MT-AV-SC4" data-precio="6.00">
+      <img draggable="false" src="../../assets/images/personajes/marvel/MT-AV-SC4.jpg" alt="Avengers MT-AV-SC4">
     Balón&nbsp;Fútbol
     <div class="contador" style="display:none;">
       <input type="number" min="0" value="0" class="input-cantidad" placeholder="Unidades">
     </div>
   </div>
 
-  <div class="caja" data-valor="Balón Fútbol MT-CA-SC2">
-    <img draggable="false" src="../../assets/images/personajes/marvel/MT-CA-SC2.jpg" alt="Capitán America MT-CA-SC2">
+  <div class="caja" data-valor="Balón Fútbol MT-CA-SC2" data-precio="4.00">
+      <img draggable="false" src="../../assets/images/personajes/marvel/MT-CA-SC2.jpg" alt="Capitán America MT-CA-SC2">
     Balón&nbsp;Fútbol
     <div class="contador" style="display:none;">
       <input type="number" min="0" value="0" class="input-cantidad" placeholder="Unidades">
     </div>
   </div>
 
-  <div class="caja" data-valor="Capitán America MT-CPT20-01T">
-    <img draggable="false" src="../../assets/images/personajes/marvel/MT-CPT20-01T.jpg" alt="Capitán America MT-CPT20-01T">
+  <div class="caja" data-valor="Capitán America MT-CPT20-01T" data-precio="25.00">
+      <img draggable="false" src="../../assets/images/personajes/marvel/MT-CPT20-01T.jpg" alt="Capitán America MT-CPT20-01T">
     Capitán America
     <div class="contador" style="display:none;">
       <input type="number" min="0" value="0" class="input-cantidad" placeholder="Unidades">
     </div>
   </div>
 
-  <div class="caja" data-valor="Hulk MT-HLK20-01T">
-    <img draggable="false" src="../../assets/images/personajes/marvel/MT-HLK20-01T.jpg" alt="Hulk MT-HLK20-01T">
+  <div class="caja" data-valor="Hulk MT-HLK20-01T" data-precio="25.00">
+      <img draggable="false" src="../../assets/images/personajes/marvel/MT-HLK20-01T.jpg" alt="Hulk MT-HLK20-01T">
     <br>Hulk
     <div class="contador" style="display:none;">
       <input type="number" min="0" value="0" class="input-cantidad" placeholder="Unidades">
     </div>
   </div>
 
-  <div class="caja" data-valor="Spider-Man MT-SP20-01T">
-    <img draggable="false" src="../../assets/images/personajes/marvel/MT-SP20-01T.jpg" alt="Spider-Man MT-SP20-01T">
+  <div class="caja" data-valor="Spider-Man MT-SP20-01T" data-precio="25.00">
+      <img draggable="false" src="../../assets/images/personajes/marvel/MT-SP20-01T.jpg" alt="Spider-Man MT-SP20-01T">
     Spider-Man
     <div class="contador" style="display:none;">
       <input type="number" min="0" value="0" class="input-cantidad" placeholder="Unidades">
@@ -226,30 +226,102 @@
 
 <script>
 function enviarWhatsApp() {
-  // Obtener valores de los campos del formulario
   let producto = document.getElementById("producto").innerText; 
-  let diseno = document.getElementById("diseno").value;
   let detalle = document.getElementById("detalle").value.trim();
 
-  // Validar que al menos se haya seleccionado un producto
-  if (!diseno) {
+  let disenoDetalle = "";
+  let total = 0;
+  let totalUnidades = 0;
+
+  // Recorre todos los productos seleccionados
+  document.querySelectorAll('.caja').forEach(caja => {
+    const nombre = caja.dataset.valor;
+    const precio = parseFloat(caja.dataset.precio) || 0;
+    const cantidad = parseInt(caja.querySelector('.input-cantidad').value) || 0;
+
+    if (cantidad > 0) {
+      const subtotal = cantidad * precio;
+      disenoDetalle += `• ${nombre} x${cantidad} = $${subtotal.toFixed(2)}\n`;
+      total += subtotal;
+      totalUnidades += cantidad;
+    }
+  });
+
+  if (disenoDetalle === "") {
     alert("⚠️ Por favor, selecciona al menos un producto.");
     return;
   }
 
-  // Construcción del mensaje principal
+  // Calcular descuento por cantidad total de unidades
+  let descuentoPorc = 0;
+  if (totalUnidades >= 6 && totalUnidades < 10) {
+    descuentoPorc = 5;
+  } else if (totalUnidades === 10) {
+    descuentoPorc = 10;
+  } else if (totalUnidades > 10) {
+    descuentoPorc = 15;
+  }
+
+  let descuento = total * (descuentoPorc / 100);
+  let totalFinal = total - descuento;
+
+  // Construir mensaje principal
   let mensaje = `📦 *Pedido MegaParty*\n\n` +
                 `🧸 *Producto:* ${producto}\n` +
-                `🎨 *Diseño(s) seleccionado(s):*\n${diseno}`;
+                `🎨 *Diseño(s) seleccionado(s):*\n${disenoDetalle}` +
+                `📦 *Unidades totales:* ${totalUnidades}\n`;
 
-  // Añadir detalles del pedido si el usuario escribió algo
+  if (descuentoPorc > 0) {
+    mensaje += `✅ *Descuento aplicado:* ${descuentoPorc}% (-$${descuento.toFixed(2)})\n`;
+  }
+
+  mensaje += `💵 *Total a pagar:* $${totalFinal.toFixed(2)}`;
+
   if (detalle !== "") {
     mensaje += `\n\n📝 *Detalle del pedido:*\n${detalle}`;
   }
 
-  // Enviar mensaje por WhatsApp
   let url = `https://wa.me/+50378013735?text=${encodeURIComponent(mensaje)}`;
   window.open(url, '_blank');
+}
+
+// OPCIONAL: Si quieres que el precio total en pantalla se actualice en tiempo real con descuento:
+document.querySelectorAll('.input-cantidad').forEach(input => {
+  input.addEventListener('input', actualizarPrecioTotal);
+});
+
+function actualizarPrecioTotal() {
+  let total = 0;
+  let totalUnidades = 0;
+
+  document.querySelectorAll('.caja').forEach(caja => {
+    const precioUnitario = parseFloat(caja.dataset.precio) || 0;
+    const cantidad = parseInt(caja.querySelector('.input-cantidad').value) || 0;
+
+    total += cantidad * precioUnitario;
+    totalUnidades += cantidad;
+  });
+
+  let descuentoPorc = 0;
+  if (totalUnidades >= 6 && totalUnidades < 10) {
+    descuentoPorc = 5;
+  } else if (totalUnidades === 10) {
+    descuentoPorc = 10;
+  } else if (totalUnidades > 10) {
+    descuentoPorc = 15;
+  }
+
+  let descuento = total * (descuentoPorc / 100);
+  let totalFinal = total - descuento;
+
+  document.getElementById('precioTotal').textContent = totalFinal.toFixed(2);
+
+  const descuentoInfo = document.getElementById('descuentoInfo');
+  if (descuentoPorc > 0) {
+    descuentoInfo.textContent = `¡Descuento aplicado: ${descuentoPorc}% (-$${descuento.toFixed(2)})!`;
+  } else {
+    descuentoInfo.textContent = ""; // Quita el texto si no hay descuento
+  }
 }
 
 </script>

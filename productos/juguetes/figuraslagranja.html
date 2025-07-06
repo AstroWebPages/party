@@ -122,7 +122,7 @@
 
   <div class="selector-cajas" id="selectorDisenos">
 
-    <div class="caja" data-valor="Bartolito RT-BAR4-01">
+    <div class="caja" data-valor="Bartolito RT-BAR4-01" data-precio="6.00">
       <img draggable="false" src="../../assets/images/juguetes/boy/RT-BAR4-01.jpg" alt="Bartolito RT-BAR4-01">
       Bartolito
       <div class="contador" style="display:none;">
@@ -130,7 +130,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Percherón RT-CB7-01">
+    <div class="caja" data-valor="Percherón RT-CB7-01" data-precio="6.00">
       <img draggable="false" src="../../assets/images/juguetes/boy/RT-CB7-01.jpg" alt="Percherón RT-CB7-01">
       Percherón
       <div class="contador" style="display:none;">
@@ -138,7 +138,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Huevos Sorpresa RT-GDZ3-SF">
+    <div class="caja" data-valor="Huevos Sorpresa RT-GDZ3-SF" data-precio="2.50">
       <img draggable="false" src="../../assets/images/juguetes/boy/RT-GDZ3-SF.jpg" alt="Huevos Sorpresa RT-GDZ3-SF">
       Huevos&nbsp;Sorpresa
       <div class="contador" style="display:none;">
@@ -146,7 +146,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Set de Figuras RT-GZ3-04S">
+    <div class="caja" data-valor="Set de Figuras RT-GZ3-04S" data-precio="8.00">
       <img draggable="false" src="../../assets/images/juguetes/boy/RT-GZ3-04S.jpg" alt="Set de Figuras RT-GZ3-04S">
       Set&nbsp;de&nbsp;Figuras
       <div class="contador" style="display:none;">
@@ -154,7 +154,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Zenón RT-ZN6-01">
+    <div class="caja" data-valor="Zenón RT-ZN6-01" data-precio="6.00">
       <img draggable="false" src="../../assets/images/juguetes/boy/RT-ZN6-01.jpg" alt="Zenón RT-ZN6-01">
       Zenón
       <div class="contador" style="display:none;">
@@ -162,12 +162,23 @@
       </div>
     </div>
 
-  </div>
+
+
+
+                      </div>
+  <!-- SECCIÓN PRECIO TOTAL -->
+  <div class="precio-total" style="margin-top:20px;">
+  <strong>Total: $<span id="precioTotal">0.00</span></strong><br>
+  <span id="descuentoInfo" style="color: green; font-weight: bold;"></span>
+</div>
+
+</div>
+
 
                       <!--nuevo formulario -->
 
 
-                    </div>
+
                     <div class="col-lg-3">
                     <div class="sticky-formulario">
                       <h4>Formulario de pedido</h4>
@@ -203,34 +214,106 @@
   <!--BOTON WHASTAPP-->
 
   <script>
-      function enviarWhatsApp() {
-  // Obtener valores de los campos del formulario
+function enviarWhatsApp() {
   let producto = document.getElementById("producto").innerText; 
-  let diseno = document.getElementById("diseno").value;
   let detalle = document.getElementById("detalle").value.trim();
 
-  // Validar que al menos se haya seleccionado un producto
-  if (!diseno) {
+  let disenoDetalle = "";
+  let total = 0;
+  let totalUnidades = 0;
+
+  // Recorre todos los productos seleccionados
+  document.querySelectorAll('.caja').forEach(caja => {
+    const nombre = caja.dataset.valor;
+    const precio = parseFloat(caja.dataset.precio) || 0;
+    const cantidad = parseInt(caja.querySelector('.input-cantidad').value) || 0;
+
+    if (cantidad > 0) {
+      const subtotal = cantidad * precio;
+      disenoDetalle += `• ${nombre} x${cantidad} = $${subtotal.toFixed(2)}\n`;
+      total += subtotal;
+      totalUnidades += cantidad;
+    }
+  });
+
+  if (disenoDetalle === "") {
     alert("⚠️ Por favor, selecciona al menos un producto.");
     return;
   }
 
-  // Construcción del mensaje principal
+  // Calcular descuento por cantidad total de unidades
+  let descuentoPorc = 0;
+  if (totalUnidades >= 6 && totalUnidades < 10) {
+    descuentoPorc = 5;
+  } else if (totalUnidades === 10) {
+    descuentoPorc = 10;
+  } else if (totalUnidades > 10) {
+    descuentoPorc = 15;
+  }
+
+  let descuento = total * (descuentoPorc / 100);
+  let totalFinal = total - descuento;
+
+  // Construir mensaje principal
   let mensaje = `📦 *Pedido MegaParty*\n\n` +
                 `🧸 *Producto:* ${producto}\n` +
-                `🎨 *Diseño(s) seleccionado(s):*\n${diseno}`;
+                `🎨 *Diseño(s) seleccionado(s):*\n${disenoDetalle}` +
+                `📦 *Unidades totales:* ${totalUnidades}\n`;
 
-  // Añadir detalles del pedido si el usuario escribió algo
+  if (descuentoPorc > 0) {
+    mensaje += `✅ *Descuento aplicado:* ${descuentoPorc}% (-$${descuento.toFixed(2)})\n`;
+  }
+
+  mensaje += `💵 *Total a pagar:* $${totalFinal.toFixed(2)}`;
+
   if (detalle !== "") {
     mensaje += `\n\n📝 *Detalle del pedido:*\n${detalle}`;
   }
 
-  // Enviar mensaje por WhatsApp
   let url = `https://wa.me/+50378013735?text=${encodeURIComponent(mensaje)}`;
   window.open(url, '_blank');
 }
 
-  </script>
+// OPCIONAL: Si quieres que el precio total en pantalla se actualice en tiempo real con descuento:
+document.querySelectorAll('.input-cantidad').forEach(input => {
+  input.addEventListener('input', actualizarPrecioTotal);
+});
+
+function actualizarPrecioTotal() {
+  let total = 0;
+  let totalUnidades = 0;
+
+  document.querySelectorAll('.caja').forEach(caja => {
+    const precioUnitario = parseFloat(caja.dataset.precio) || 0;
+    const cantidad = parseInt(caja.querySelector('.input-cantidad').value) || 0;
+
+    total += cantidad * precioUnitario;
+    totalUnidades += cantidad;
+  });
+
+  let descuentoPorc = 0;
+  if (totalUnidades >= 6 && totalUnidades < 10) {
+    descuentoPorc = 5;
+  } else if (totalUnidades === 10) {
+    descuentoPorc = 10;
+  } else if (totalUnidades > 10) {
+    descuentoPorc = 15;
+  }
+
+  let descuento = total * (descuentoPorc / 100);
+  let totalFinal = total - descuento;
+
+  document.getElementById('precioTotal').textContent = totalFinal.toFixed(2);
+
+  const descuentoInfo = document.getElementById('descuentoInfo');
+  if (descuentoPorc > 0) {
+    descuentoInfo.textContent = `¡Descuento aplicado: ${descuentoPorc}% (-$${descuento.toFixed(2)})!`;
+  } else {
+    descuentoInfo.textContent = ""; // Quita el texto si no hay descuento
+  }
+}
+
+</script>
 
 <!-- nuevo formulario termina -->
 

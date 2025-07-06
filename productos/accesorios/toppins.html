@@ -46,7 +46,7 @@
       <div class="row">
         <div class="col-lg-8 col-md-8">
           <ul class="info">
-            <li data-href="mailto:ventasmegapartytoys@gmail.com"><i class="fa fa-envelope"></i> ventasmegapartytoys@gmail.com</li>
+            <li data-href="mailto:astrowebpages@gmail.com"><i class="fa fa-envelope"></i> astrowebpages@gmail.com</li>
             <li data-href="https://maps.app.goo.gl/uK5McNyCE6pwyZLU6"><i class="fa fa-map"></i> Colón 2000 Duty Free Mall piso #2 A107, Ciudad Colón, Panamá</li>
           </ul>
           </ul>
@@ -123,7 +123,7 @@
 
   <div class="selector-cajas" id="selectorDisenos">
 
-    <div class="caja" data-valor="Bluey DPG-BLU-T013">
+    <div class="caja" data-valor="Bluey DPG-BLU-T013" data-precio="2.00">
       <img draggable="false" src="../../assets/images/accesorios/DPG-BLU-T013.jpg" alt="Bluey DPG-BLU-T013">
       Bluey
       <div class="contador" style="display:none;">
@@ -131,7 +131,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Moana DPG-MO2-T013">
+    <div class="caja" data-valor="Moana DPG-MO2-T013" data-precio="2.00">
       <img draggable="false" src="../../assets/images/accesorios/DPG-MO2-T013.jpg" alt="Moana DPG-MO2-T013">
       Moana
       <div class="contador" style="display:none;">
@@ -139,7 +139,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Stitch DPG-STI-T013">
+    <div class="caja" data-valor="Stitch DPG-STI-T013" data-precio="2.00">
       <img draggable="false" src="../../assets/images/accesorios/DPG-STI-T013.jpg" alt="Stitch DPG-STI-T013">
       Stitch
       <div class="contador" style="display:none;">
@@ -147,7 +147,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Minecraft FPG-MT-T013">
+    <div class="caja" data-valor="Minecraft FPG-MT-T013" data-precio="2.00">
       <img draggable="false" src="../../assets/images/accesorios/FPG-MT-T013.jpg" alt="Minecraft FPG-MT-T013">
       Minecraft
       <div class="contador" style="display:none;">
@@ -155,7 +155,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Spider-Man MPG-SP2-T013">
+    <div class="caja" data-valor="Spider-Man MPG-SP2-T013" data-precio="2.00">
       <img draggable="false" src="../../assets/images/accesorios/MPG-SP2-T013.jpg" alt="Spider-Man MPG-SP2-T013">
       Spider-Man
       <div class="contador" style="display:none;">
@@ -163,7 +163,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Princesa PPG-PR3-T013">
+    <div class="caja" data-valor="Princesa PPG-PR3-T013" data-precio="2.00">
       <img draggable="false" src="../../assets/images/accesorios/PPG-PR3-T013.jpg" alt="Princesa PPG-PR3-T013">
       Princesa
       <div class="contador" style="display:none;">
@@ -171,7 +171,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Paw Patrol (1) XPG-PWG-T013">
+    <div class="caja" data-valor="Paw Patrol (1) XPG-PWG-T013" data-precio="2.00">
       <img draggable="false" src="../../assets/images/accesorios/XPG-PWG-T013.jpg" alt="Paw Patrol (1) XPG-PWG-T013">
       Paw&nbsp;Patrol&nbsp;(1)
       <div class="contador" style="display:none;">
@@ -179,7 +179,7 @@
       </div>
     </div>
 
-    <div class="caja" data-valor="Paw Patrol (2) XPG-PW-T013">
+    <div class="caja" data-valor="Paw Patrol (2) XPG-PW-T013" data-precio="2.00">
       <img draggable="false" src="../../assets/images/accesorios/XPG-PW-T013.jpg" alt="Paw Patrol (2) XPG-PW-T013">
       Paw&nbsp;Patrol&nbsp;(2)
       <div class="contador" style="display:none;">
@@ -187,13 +187,23 @@
       </div>
     </div>
 
-  </div>
 
 
-                    <!--nuevo formulario -->
+
+                      </div>
+  <!-- SECCIÓN PRECIO TOTAL -->
+  <div class="precio-total" style="margin-top:20px;">
+  <strong>Total: $<span id="precioTotal">0.00</span></strong><br>
+  <span id="descuentoInfo" style="color: green; font-weight: bold;"></span>
+</div>
+
+</div>
 
 
-                    </div>
+                      <!--nuevo formulario -->
+
+
+
                     <div class="col-lg-3">
                     <div class="sticky-formulario">
                       <h4>Formulario de pedido</h4>
@@ -229,34 +239,106 @@
   <!--BOTON WHASTAPP-->
 
   <script>
-      function enviarWhatsApp() {
-  // Obtener valores de los campos del formulario
+function enviarWhatsApp() {
   let producto = document.getElementById("producto").innerText; 
-  let diseno = document.getElementById("diseno").value;
   let detalle = document.getElementById("detalle").value.trim();
 
-  // Validar que al menos se haya seleccionado un producto
-  if (!diseno) {
+  let disenoDetalle = "";
+  let total = 0;
+  let totalUnidades = 0;
+
+  // Recorre todos los productos seleccionados
+  document.querySelectorAll('.caja').forEach(caja => {
+    const nombre = caja.dataset.valor;
+    const precio = parseFloat(caja.dataset.precio) || 0;
+    const cantidad = parseInt(caja.querySelector('.input-cantidad').value) || 0;
+
+    if (cantidad > 0) {
+      const subtotal = cantidad * precio;
+      disenoDetalle += `• ${nombre} x${cantidad} = $${subtotal.toFixed(2)}\n`;
+      total += subtotal;
+      totalUnidades += cantidad;
+    }
+  });
+
+  if (disenoDetalle === "") {
     alert("⚠️ Por favor, selecciona al menos un producto.");
     return;
   }
 
-  // Construcción del mensaje principal
+  // Calcular descuento por cantidad total de unidades
+  let descuentoPorc = 0;
+  if (totalUnidades >= 6 && totalUnidades < 10) {
+    descuentoPorc = 5;
+  } else if (totalUnidades === 10) {
+    descuentoPorc = 10;
+  } else if (totalUnidades > 10) {
+    descuentoPorc = 15;
+  }
+
+  let descuento = total * (descuentoPorc / 100);
+  let totalFinal = total - descuento;
+
+  // Construir mensaje principal
   let mensaje = `📦 *Pedido MegaParty*\n\n` +
                 `🧸 *Producto:* ${producto}\n` +
-                `🎨 *Diseño(s) seleccionado(s):*\n${diseno}`;
+                `🎨 *Diseño(s) seleccionado(s):*\n${disenoDetalle}` +
+                `📦 *Unidades totales:* ${totalUnidades}\n`;
 
-  // Añadir detalles del pedido si el usuario escribió algo
+  if (descuentoPorc > 0) {
+    mensaje += `✅ *Descuento aplicado:* ${descuentoPorc}% (-$${descuento.toFixed(2)})\n`;
+  }
+
+  mensaje += `💵 *Total a pagar:* $${totalFinal.toFixed(2)}`;
+
   if (detalle !== "") {
     mensaje += `\n\n📝 *Detalle del pedido:*\n${detalle}`;
   }
 
-  // Enviar mensaje por WhatsApp
   let url = `https://wa.me/+50378013735?text=${encodeURIComponent(mensaje)}`;
   window.open(url, '_blank');
 }
 
-  </script>
+// OPCIONAL: Si quieres que el precio total en pantalla se actualice en tiempo real con descuento:
+document.querySelectorAll('.input-cantidad').forEach(input => {
+  input.addEventListener('input', actualizarPrecioTotal);
+});
+
+function actualizarPrecioTotal() {
+  let total = 0;
+  let totalUnidades = 0;
+
+  document.querySelectorAll('.caja').forEach(caja => {
+    const precioUnitario = parseFloat(caja.dataset.precio) || 0;
+    const cantidad = parseInt(caja.querySelector('.input-cantidad').value) || 0;
+
+    total += cantidad * precioUnitario;
+    totalUnidades += cantidad;
+  });
+
+  let descuentoPorc = 0;
+  if (totalUnidades >= 6 && totalUnidades < 10) {
+    descuentoPorc = 5;
+  } else if (totalUnidades === 10) {
+    descuentoPorc = 10;
+  } else if (totalUnidades > 10) {
+    descuentoPorc = 15;
+  }
+
+  let descuento = total * (descuentoPorc / 100);
+  let totalFinal = total - descuento;
+
+  document.getElementById('precioTotal').textContent = totalFinal.toFixed(2);
+
+  const descuentoInfo = document.getElementById('descuentoInfo');
+  if (descuentoPorc > 0) {
+    descuentoInfo.textContent = `¡Descuento aplicado: ${descuentoPorc}% (-$${descuento.toFixed(2)})!`;
+  } else {
+    descuentoInfo.textContent = ""; // Quita el texto si no hay descuento
+  }
+}
+
+</script>
 
 <!-- nuevo formulario termina -->
 
