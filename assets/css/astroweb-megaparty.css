@@ -1155,12 +1155,121 @@ Properties Style
 --------------------------------------------- 
 */
 
+.properties-items .item {
+  width: 246px;
+  min-height: 600px;
+  height: 600px;
+  max-height: 600px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+/* En todos los dispositivos */
+.properties-items .item .carousel {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+  display: block;
+  position: relative;
+}
+
+.properties-items .item .carousel-inner {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+.properties-items .item .carousel-item {
+  width: 100%;
+  height: 100%;
+}
+
+.properties-items .item .carousel-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+}
+
+
+/* Título largo: recortar con ... */
+.properties-items .item h4 {
+  font-size: 16px;
+  margin: 15px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Listado adaptable con scroll si es necesario */
+.properties-items .item ul {
+  margin: 10px 0;
+  padding: 0;
+  list-style: none;
+  max-height: 80px;
+  overflow: auto;
+}
+
+/* Botón abajo fijo */
+.properties-items .item .main-button {
+  margin-top: auto;
+  text-align: center;
+}
+
+/* Opcional: barra de scroll sutil */
+.properties-items .item ul::-webkit-scrollbar {
+  width: 4px;
+}
+.properties-items .item ul::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  .properties-items .item {
+    width: 100%;
+    max-width: 246px;
+    height: 300px;
+    min-height: 300px;
+    max-height: 300px;
+    overflow: hidden;
+  }
+
+  /* Ocultar en móvil */
+  .properties-items .item h4,
+  .properties-items .item ul,
+  .properties-items .item .main-button {
+    display: none;
+  }
+
+  /* Mostrar solo los elementos deseados */
+  .properties-items .item .carousel-inner,
+  .properties-items .item .category,
+  .properties-items .item h6 {
+    display: block;
+  }
+}
+
+
+
+
+
 .properties .item {
   background-color: #fafafa;
   border-radius: 10px;
   padding: 30px;
   margin-bottom: 30px;
 }
+
+.item-none {
+  visibility: hidden !important;
+}
+
 
 .properties .item img {
   width: 100%;
@@ -1221,6 +1330,84 @@ Properties Style
 .properties .item .main-button {
   text-align: center;
 }
+
+
+
+/* Contenedor general con flex para igualar altura de columnas */
+.properties-index {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.properties-index .col-lg-3,
+.properties-index .col-md-6,
+.properties-index .col-6 {
+  display: flex;
+}
+
+/* Tarjeta individual */
+.index-item {
+  background-color: #fafafa;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Imagen cuadrada 1:1 */
+.index-item img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Título centrado */
+.index-item h4 {
+  text-align: center;
+  font-size: 18px;
+  margin: 20px 0;
+}
+
+/* Enlace del título */
+.index-item h4 a {
+  color: #1e1e1e;
+  text-decoration: none;
+}
+
+/* Botón fijo abajo */
+.index-item .main-button {
+  text-align: center;
+  margin-top: auto;
+}
+
+.index-item .main-button a {
+  background-color: #953f99;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  display: inline-block;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.properties-index .item h4 {
+  height: 48px; /* ajustable según tu diseño */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-align: center;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
 
 
 /* 
@@ -1885,6 +2072,107 @@ Contact Page Style
 
 .contact-page #contact-form button:hover {
   background-color: #953f99;
+}
+
+.contact-page #contact-form {
+  margin-left: 30px;
+  border-radius: 25px;
+  box-shadow: 0px 15px 40px rgba(255, 105, 180, 0.3), 
+              0px 5px 15px rgba(255, 165, 0, 0.2);
+  padding: 40px 35px;
+  background: linear-gradient(135deg, #ff6bb6 0%, #ffa726 25%, #42a5f5 50%, #ab47bc 75%, #ff6bb6 100%);
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-page #contact-form::before {
+  content: '';
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  right: -15px;
+  bottom: -15px;
+  border-radius: 35px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.contact-page #contact-form .emoji-border {
+  position: absolute;
+  font-size: 28px;
+  animation: rotateAroundForm 8s linear infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.contact-page #contact-form .emoji-1 {
+  top: -20px;
+  left: 50%;
+  transform-origin: 0 calc(50vh);
+  animation-delay: 0s;
+}
+
+.contact-page #contact-form .emoji-2 {
+  top: 20%;
+  right: -25px;
+  transform-origin: calc(-50vw) 0;
+  animation-delay: -1s;
+}
+
+.contact-page #contact-form .emoji-3 {
+  bottom: -20px;
+  right: 40%;
+  transform-origin: 0 calc(-30vh);
+  animation-delay: -2s;
+}
+
+.contact-page #contact-form .emoji-4 {
+  bottom: 20%;
+  left: -25px;
+  transform-origin: calc(50vw) 0;
+  animation-delay: -3s;
+}
+
+.contact-page #contact-form .emoji-5 {
+  top: 10%;
+  left: 20%;
+  transform-origin: 0 0;
+  animation-delay: -4s;
+}
+
+.contact-page #contact-form .emoji-6 {
+  top: 10%;
+  right: 20%;
+  transform-origin: 0 0;
+  animation-delay: -5s;
+}
+
+.contact-page #contact-form .emoji-7 {
+  bottom: 10%;
+  left: 20%;
+  transform-origin: 0 0;
+  animation-delay: -6s;
+}
+
+.contact-page #contact-form .emoji-8 {
+  bottom: 10%;
+  right: 20%;
+  transform-origin: 0 0;
+  animation-delay: -7s;
+}
+
+.contact-page #contact-form::after {
+  content: '';
+  position: absolute;
+  top: -50px;
+  left: -50px;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float 6s ease-in-out infinite;
 }
 
 
